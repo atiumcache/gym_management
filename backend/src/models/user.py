@@ -1,4 +1,4 @@
-from app.database import Base
+from src.database import Base
 from sqlalchemy import Column, Integer, String, Datetime, ForeignKey, Enum, relationship
 
 class User(Base):
