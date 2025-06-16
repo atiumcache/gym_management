@@ -8,7 +8,7 @@ class Activity(Base):
     coach_id = Column(Integer, ForeignKey('user.id'))
     start_time = Column(Timestamp)
     end_time = Column(Timestamp)
-    required_credit_type_id = Column(Integer) # TODO: add foreign key
+    # required_credit_type_id = Column(Integer) # TODO: add foreign key
     credits_required = Column(Integer)
     max_capacity = Column(Integer)
     # recurring? TODO

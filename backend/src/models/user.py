@@ -1,5 +1,5 @@
 from src.database import Base
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Enum 
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Enum, func 
 
 class User(Base):
     __tablename__ = 'user'
@@ -10,8 +10,8 @@ class User(Base):
     first_name = Column(String)
     last_name = Column(String)
     phone = Column(String)
-    created_at = Column(DateTime)
-    updated_at = Column(DateTime)
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
 
     #roles = relationship('Role', secondary='user_role', back_populates='users')
 

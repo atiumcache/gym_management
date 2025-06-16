@@ -49,8 +49,8 @@ def test_create_user(test_db: Session):
     assert created_user.first_name == "John"
     assert created_user.last_name == "Doe"
     assert created_user.phone.replace('-', "") == "tel:+12345678901"
-    #assert created_user.created_at is not None  TODO: Add created/updated timestamps to db
-    #assert created_user.updated_at is not None
+    assert created_user.created_at is not None  
+    assert created_user.updated_at is not None
     
     # Clean up
     test_db.delete(created_user)
@@ -78,8 +78,8 @@ def test_get_user_by_email(test_db: Session):
     assert result.first_name == "Test"
     assert result.last_name == "User"
     assert result.phone.replace("-", "") == "tel:+12345678901"
-    #assert result.created_at is not None  TODO: Add timestamp functionality
-    #assert result.updated_at is not None
+    assert result.created_at is not None  
+    assert result.updated_at is not None
     
     # Test getting a non-existent user
     result = user_repo.get_user_by_email(test_db, "nonexistent@example.com")
