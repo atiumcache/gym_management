@@ -16,17 +16,6 @@ def test_user():
     )
 
 
-@pytest.fixture
-def test_user():
-    return User(
-        email="test@example.com",
-        password="hashed_password",
-        first_name="Test",
-        last_name="User",
-        is_active=True,
-    )
-
-
 def test_create_user(test_db: Session):
     # Create the CRUD repository
     user_repo = UserCRUDRepository(User)
@@ -90,7 +79,7 @@ def test_get_user_by_email(test_db: Session):
     assert result is None
 
 
-def test_add_role(test_db: Session):
+def test_role_methods(test_db: Session):
     user_repo = UserCRUDRepository(User)
 
     user_create = UserCreate(
@@ -113,3 +102,20 @@ def test_add_role(test_db: Session):
     # Check if the user has the admin role
     user_roles = [role.name for role in my_user.roles]
     assert "admin" in user_roles
+
+    # Check if role removal works
+    user_repo.remove_role(db=test_db, user_id=my_user.id, role_name="admin")
+    user_roles = [role.name for role in my_user.roles]
+    assert "admin" not in user_roles
+
+    # Check if set_roles functions as expected
+    roles_to_add = ["admin", "client"]
+    user_repo.set_roles(test_db, my_user.id, roles_to_add)
+    for role in roles_to_add:
+        assert role in [role.name for role in my_user.roles]
+    for role in user_repo.get_user_roles(test_db, my_user.id):
+        assert role in roles_to_add
+
+    # Check has_role functionality
+    assert user_repo.has_role(test_db, my_user.id, "admin")
+    assert not user_repo.has_role(test_db, my_user.id, "coach")

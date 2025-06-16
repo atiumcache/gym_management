@@ -90,3 +90,69 @@ class UserCRUDRepository(CRUDRepository):
         except Exception:
             db.rollback()
             return False
+
+    def get_user_roles(self, db: Session, user_id: int) -> List[str]:
+        """Get all roles for a user.
+
+        Args:
+            db: The database session
+            user_id: ID of the user
+
+        Returns:
+            List of role names
+        """
+        roles = (
+            db.query(Role.name).join(UserRole).filter(UserRole.user_id == user_id).all()
+        )
+        return [role.name for role in roles]
+
+    def has_role(self, db: Session, user_id: int, role_name: str) -> bool:
+        """Check if a user has a specific role.
+
+        Args:
+            db: The database session
+            user_id: ID of the user
+            role_name: Name of the role to check
+
+        Returns:
+            True if user has the role, False otherwise
+        """
+        count = (
+            db.query(UserRole)
+            .join(Role)
+            .filter(UserRole.user_id == user_id, Role.name == role_name)
+            .count()
+        )
+        return count > 0
+
+    def set_roles(self, db: Session, user_id: int, role_names: List[str]) -> bool:
+        """Set user's roles (replaces all existing roles).
+
+        Args:
+            db: The database session
+            user_id: ID of the user
+            role_names: List of role names to assign
+
+        Returns:
+            True if roles were set successfully, False otherwise
+        """
+        try:
+            # Remove all existing roles
+            db.query(UserRole).filter(UserRole.user_id == user_id).delete()
+
+            # Add new roles
+            for role_name in role_names:
+                role = db.query(Role).filter(Role.name == role_name).first()
+                if role:
+                    user_role = UserRole(user_id=user_id, role_id=role.id)
+                    db.add(user_role)
+
+            db.commit()
+            return True
+
+        except Exception:
+            db.rollback()
+            return False
+
+
+user_crud = UserCRUDRepository(User)

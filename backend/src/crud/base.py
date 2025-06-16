@@ -22,6 +22,9 @@ class CRUDRepository:
     def get_one(self, db: Session, *args, **kwargs) -> Optional[ORMModel]:
         return db.query(self._model).filter(*args).filter_by(**kwargs).first()
 
+    def get_many(self, db: Session, *args, **kwargs) -> List[Optional[ORMModel]]:
+        return db.query(self._model).filter(*args).filter_by(**kwargs).all()
+
     def create(self, db: Session, obj_create: Type[BaseModel]) -> ORMModel:
         """Create a new record in the db.
 
@@ -37,4 +40,18 @@ class CRUDRepository:
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
+        return db_obj
+
+    def delete(self, db: Session, db_obj: Type[BaseModel]) -> ORMModel:
+        """Delete record from db.
+
+        Args:
+            db: The db session
+            db_obj: The object to be deleted
+
+        Returns:
+            The deleted object.
+        """
+        db.delete(db_obj)
+        db.commit()
         return db_obj

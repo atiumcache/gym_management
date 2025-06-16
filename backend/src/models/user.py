@@ -1,6 +1,9 @@
-from src.database import Base
+from enum import Enum as PyEnum
+
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Enum, func
 from sqlalchemy.orm import relationship
+
+from src.database import Base
 
 
 class User(Base):
@@ -18,11 +21,17 @@ class User(Base):
     roles = relationship("Role", secondary="user_role", back_populates="users")
 
 
+class RoleName(str, PyEnum):
+    CLIENT = "client"
+    COACH = "coach"
+    ADMIN = "admin"
+
+
 class Role(Base):
     __tablename__ = "role"
 
     id = Column(Integer, primary_key=True)
-    name = Column(Enum("client", "coach", "admin"))
+    name = Column(Enum(RoleName, name="role_name"))
 
     users = relationship("User", secondary="user_role", back_populates="roles")
 
