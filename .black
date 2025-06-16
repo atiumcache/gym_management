@@ -1,0 +1,14 @@
+[tool.black]
+line-length = 88
+target-version = ['py39']
+include = '\.pyi?$'
+extend-exclude = '''
+# A regex that matches all of the paths in exclude, plus:
+# - all paths that end in \.pyi$
+# - all paths that end in /__init__.py
+# - all paths that are in the gitignore
+'''
+
+[tool.ruff]
+select = ['E', 'F', 'I', 'W']
+line-length = 88

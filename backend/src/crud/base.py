@@ -3,7 +3,8 @@ from typing import List, Optional, Type, TypeVar
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-ORMModel = TypeVar('ORMModel')
+ORMModel = TypeVar("ORMModel")
+
 
 class CRUDRepository:
     """Base interface for CRUD operations."""
@@ -12,8 +13,8 @@ class CRUDRepository:
         """Initialize the CRUD repository.
 
         Args:
-            model: The ORM model to use for CRUD ops. 
-            See src.models. 
+            model: The ORM model to use for CRUD ops.
+            See src.models.
         """
         self._model = model
         self._name = model.__name__
@@ -22,14 +23,14 @@ class CRUDRepository:
         return db.query(self._model).filter(*args).filter_by(**kwargs).first()
 
     def create(self, db: Session, obj_create: Type[BaseModel]) -> ORMModel:
-        """Create a new record in the db. 
+        """Create a new record in the db.
 
         Args:
             db: The db session.
-            data_obj: The data for creating the new record (Pydantic model). 
+            data_obj: The data for creating the new record (Pydantic model).
 
         Returns:
-            The newly created record. 
+            The newly created record.
         """
         obj_create_data = obj_create.model_dump(exclude_none=True, exclude_unset=True)
         db_obj = self._model(**obj_create_data)

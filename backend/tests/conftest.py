@@ -16,23 +16,19 @@ from src.models.user import Role
 def test_db():
     """Fixture for creating a fresh in-memory SQLite database for each test."""
     engine = create_engine("sqlite://")
-    
+
     # Create all tables
     Base.metadata.create_all(bind=engine)
-    
+
     # Create a session
     TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     db = TestingSessionLocal()
-    
+
     # Initialize roles
-    roles = [
-        Role(name='client'),
-        Role(name='coach'),
-        Role(name='admin')
-    ]
+    roles = [Role(name="client"), Role(name="coach"), Role(name="admin")]
     db.add_all(roles)
     db.commit()
-    
+
     try:
         yield db
     finally:

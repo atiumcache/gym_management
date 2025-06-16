@@ -3,6 +3,7 @@ from pydantic_extra_types.phone_numbers import PhoneNumber
 from typing import Optional, List
 from datetime import datetime
 
+
 class ActivityBase(BaseModel):
     coach_id: int
     start_time: datetime
@@ -11,12 +12,14 @@ class ActivityBase(BaseModel):
     credits_required: int = 1
     max_capacity: int = 10
 
+
 class AttendeeInfo(BaseModel):
     id: int
     first_name: str
     last_name: str
     email: EmailStr
     phone: PhoneNumber
+
 
 class ActivityResponse(ActivityBase):
     id: int

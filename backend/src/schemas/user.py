@@ -3,19 +3,23 @@ from pydantic_extra_types.phone_numbers import PhoneNumber
 from datetime import datetime
 from typing import Optional
 
+
 class UserBase(BaseModel):
     email: EmailStr
     first_name: str
     last_name: str
     phone: PhoneNumber
 
+
 class UserCreate(UserBase):
     password: str
+
 
 class UserResponse(UserBase):
     id: int
     created_at: datetime
     updated_at: datetime
+
 
 class UserUpdate(UserBase):
     id: int

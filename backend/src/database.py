@@ -4,18 +4,15 @@ from src.config import settings
 
 engine = create_engine(
     settings.database_url,
-    #pool_pre_ping=True,
-    #pool_recyle=3600,
-    echo=settings.debug  # log queries in debug mode
+    # pool_pre_ping=True,
+    # pool_recyle=3600,
+    echo=settings.debug,  # log queries in debug mode
 )
 
-SessionLocal = sessionmaker(
-    autocommit=False,
-    autoflush=False,
-    bind=engine
-)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
+
 
 def get_db():
     """
