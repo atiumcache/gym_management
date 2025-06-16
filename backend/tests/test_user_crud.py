@@ -9,7 +9,7 @@ from src.schemas.user import UserCreate, UserResponse
 def test_user():
     return User(
         email="test@example.com",
-        password="hashed_password",
+        password="Hashed_password$!",
         first_name="Test",
         last_name="User",
         is_active=True,
@@ -26,7 +26,7 @@ def test_create_user(test_db: Session):
         first_name="John",
         last_name="Doe",
         phone="+12345678901",
-        password="securepassword123",
+        password="Securepassword123$!",
     )
 
     # Create the user
@@ -59,7 +59,7 @@ def test_get_user_by_email(test_db: Session):
         first_name="Test",
         last_name="User",
         phone="+12345678901",
-        password="securepassword123",
+        password="Securepassword123$",
     )
     user_repo.create(test_db, user_create)
 
@@ -87,7 +87,7 @@ def test_role_methods(test_db: Session):
         first_name="Test",
         last_name="User",
         phone="+12345678901",
-        password="securepassword123",
+        password="Securepassword123$",
     )
 
     created_user = user_repo.create(test_db, user_create)
