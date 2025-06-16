@@ -84,3 +84,27 @@ def test_get_user_by_email(test_db: Session):
     # Test getting a non-existent user
     result = user_repo.get_user_by_email(test_db, "nonexistent@example.com")
     assert result is None
+
+def test_add_role(test_db: Session):
+    user_repo = UserCRUDRepository(User)
+    
+    user_create = UserCreate(
+        email="test@example.com",
+        first_name="Test",
+        last_name="User",
+        phone="+12345678901",
+        password="securepassword123"
+    )
+    
+    created_user = user_repo.create(test_db, user_create)
+    my_user_id = created_user.id
+    add_result = user_repo.add_role(db=test_db, user_id=my_user_id, role_name='admin')
+    assert add_result is True
+    
+    # Get the user after adding role
+    my_user = user_repo.get_user_by_email(test_db, 'test@example.com')
+    assert my_user is not None
+    
+    # Check if the user has the admin role
+    user_roles = [role.name for role in my_user.roles]
+    assert 'admin' in user_roles

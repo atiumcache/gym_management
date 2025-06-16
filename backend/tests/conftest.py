@@ -9,12 +9,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from src.database import Base
 from src.config import settings
+from src.models.user import Role
 
 
 @pytest.fixture(scope="function")
 def test_db():
     """Fixture for creating a fresh in-memory SQLite database for each test."""
-    # Create a fresh in-memory SQLite database
     engine = create_engine("sqlite://")
     
     # Create all tables
@@ -23,6 +23,15 @@ def test_db():
     # Create a session
     TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     db = TestingSessionLocal()
+    
+    # Initialize roles
+    roles = [
+        Role(name='client'),
+        Role(name='coach'),
+        Role(name='admin')
+    ]
+    db.add_all(roles)
+    db.commit()
     
     try:
         yield db

@@ -1,5 +1,6 @@
 from src.database import Base
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Enum, func 
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Enum, func
+from sqlalchemy.orm import relationship 
 
 class User(Base):
     __tablename__ = 'user'
@@ -13,15 +14,15 @@ class User(Base):
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
 
-    #roles = relationship('Role', secondary='user_role', back_populates='users')
+    roles = relationship('Role', secondary='user_role', back_populates='users')
 
 class Role(Base):
     __tablename__ = 'role'
 
     id = Column(Integer, primary_key=True)
-    name = Enum('client', 'coach', 'admin')
+    name = Column(Enum('client', 'coach', 'admin'))
 
-    #users = relationship('User', secondary='user_role', back_populates='roles')
+    users = relationship('User', secondary='user_role', back_populates='roles')
 
 class UserRole(Base):
     __tablename__ = 'user_role'
