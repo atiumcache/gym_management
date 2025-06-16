@@ -1,19 +1,19 @@
 from src.database import Base
-from sqlalchemy import Column, Integer, String, Datetime, ForeignKey, Enum, relationship
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Enum 
 
 class User(Base):
     __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True)
     email = Column(String, unique=True)
-    password_hash = Column(String)
+    password = Column(String)
     first_name = Column(String)
     last_name = Column(String)
     phone = Column(String)
-    created_at = Column(Datetime)
-    updated_at = Column(Datetime)
+    created_at = Column(DateTime)
+    updated_at = Column(DateTime)
 
-    roles = relationship('Role', secondary='user_role', back_populates='users')
+    #roles = relationship('Role', secondary='user_role', back_populates='users')
 
 class Role(Base):
     __tablename__ = 'role'
@@ -21,7 +21,7 @@ class Role(Base):
     id = Column(Integer, primary_key=True)
     name = Enum('client', 'coach', 'admin')
 
-    users = relationship('User', secondary='user_role', back_populates='roles')
+    #users = relationship('User', secondary='user_role', back_populates='roles')
 
 class UserRole(Base):
     __tablename__ = 'user_role'
