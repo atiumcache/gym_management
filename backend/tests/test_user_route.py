@@ -1,12 +1,12 @@
 import pytest
-from fastapi.testclient import TestClient
 from fastapi import Depends, status
+from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
-from src.main import app
-from src.database import get_db
-from src.models.user import User, Role, UserRole, RoleName
 from src.crud.user import user_crud
+from src.database import get_db
+from src.main import app
+from src.models.user import Role, RoleName, User, UserRole
 from src.schemas.user import UserCreate, UserResponse
 
 

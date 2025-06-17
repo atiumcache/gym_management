@@ -1,7 +1,8 @@
 import pytest
 from sqlalchemy.orm import Session
-from src.models.user import User
+
 from src.crud.user import UserCRUDRepository
+from src.models.user import User
 from src.schemas.user import UserCreate, UserResponse
 
 

@@ -1,10 +1,10 @@
-from src.crud.base import CRUDRepository
-from src.models.user import User, Role, UserRole
+from typing import List, Optional, Union
 
-from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
 
-from typing import Optional, List, Union
+from src.crud.base import CRUDRepository
+from src.models.user import Role, User, UserRole
 
 
 class UserCRUDRepository(CRUDRepository):

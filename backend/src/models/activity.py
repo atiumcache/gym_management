@@ -1,5 +1,6 @@
+from sqlalchemy import Column, Enum, ForeignKey, Integer, Timestamp
+
 from database import Base
-from sqlalchemy import Column, Timestamp, Integer, Enum, ForeignKey
 
 
 class Activity(Base):

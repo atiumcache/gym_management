@@ -1,8 +1,9 @@
-from pydantic import BaseModel, EmailStr, Field, field_validator
 import re
-from pydantic_extra_types.phone_numbers import PhoneNumber
 from datetime import datetime
 from typing import Optional
+
+from pydantic import BaseModel, EmailStr, Field, field_validator
+from pydantic_extra_types.phone_numbers import PhoneNumber
 
 
 class UserBase(BaseModel):
@@ -23,21 +24,23 @@ class UserCreate(UserBase):
         - At least one lowercase letter
         - At least one number
         - At least one special character (@$!%*?&)
-        """
+        """,
     )
-    
-    @field_validator('password')
+
+    @field_validator("password")
     def validate_password_strength(cls, v):
         if len(v) < 8:
-            raise ValueError('Password must be at least 8 characters long')
-        if not re.search(r'[A-Z]', v):
-            raise ValueError('Password must contain at least one uppercase letter')
-        if not re.search(r'[a-z]', v):
-            raise ValueError('Password must contain at least one lowercase letter')
-        if not re.search(r'\d', v):
-            raise ValueError('Password must contain at least one number')
-        if not re.search(r'[@$!%*?&]', v):
-            raise ValueError('Password must contain at least one special character (@$!%*?&)')
+            raise ValueError("Password must be at least 8 characters long")
+        if not re.search(r"[A-Z]", v):
+            raise ValueError("Password must contain at least one uppercase letter")
+        if not re.search(r"[a-z]", v):
+            raise ValueError("Password must contain at least one lowercase letter")
+        if not re.search(r"\d", v):
+            raise ValueError("Password must contain at least one number")
+        if not re.search(r"[@$!%*?&]", v):
+            raise ValueError(
+                "Password must contain at least one special character (@$!%*?&)"
+            )
         return v
 
 
@@ -49,7 +52,12 @@ class UserResponse(UserBase):
 
 class UserUpdate(UserBase):
     id: int
-    email: Optional[EmailStr] = None
-    first_name: Optional[str] = None
-    last_name: Optional[str] = None
-    phone: Optional[PhoneNumber] = None
+    email: EmailStr  # Required
+    first_name: str  # Required
+    last_name: str  # Required
+    phone: PhoneNumber  # Required
+
+
+class UserPasswordUpdate(UserBase):
+    # TODO
+    pass

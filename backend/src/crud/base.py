@@ -42,6 +42,36 @@ class CRUDRepository:
         db.refresh(db_obj)
         return db_obj
 
+    def update(
+        self,
+        db: Session,
+        db_obj: ORMModel,
+        obj_update: Type[BaseModel],
+    ) -> ORMModel:
+        """
+        Updates a record in the database.
+
+        Parameters:
+            db: The database session.
+            db_obj: The database object to be updated.
+            obj_update: The updated data for the object
+
+        Returns:
+            ORMModel: The updated database object.
+        """
+        # Convert model to dict
+        obj_update_data = obj_update.model_dump()
+
+        # Update all fields
+        for field, value in obj_update_data.items():
+            setattr(db_obj, field, value)
+
+        # Add to session and commit
+        db.add(db_obj)
+        db.commit()
+        db.refresh(db_obj)
+        return db_obj
+
     def delete(self, db: Session, db_obj: Type[BaseModel]) -> ORMModel:
         """Delete record from db.
 

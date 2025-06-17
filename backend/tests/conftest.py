@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -10,9 +11,9 @@ from sqlalchemy_utils import create_database, database_exists
 # Add the project root directory to Python path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.database import Base
 from src.config import settings
-from src.models.user import User, Role, UserRole
+from src.database import Base
+from src.models.user import Role, User, UserRole
 
 # Test database configuration
 TEST_SQLALCHEMY_DATABASE_URL = "postgresql://test:test@localhost:5433/test"

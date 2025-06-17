@@ -10,10 +10,11 @@ Commands:
     drop      Drop test database
     reset     Reset test database (drop and recreate)
 """
-import sys
 import os
-from sqlalchemy_utils import create_database, drop_database, database_exists
+import sys
+
 from sqlalchemy import create_engine
+from sqlalchemy_utils import create_database, database_exists, drop_database
 
 # Add the project root directory to Python path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

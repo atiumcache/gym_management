@@ -1,14 +1,13 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
-from sqlalchemy.exc import IntegrityError
-
 from typing import List, Optional
 
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
+
+from src.crud.user import user_crud
 from src.database import get_db
 from src.models.user import User
 from src.schemas.user import UserCreate, UserResponse, UserUpdate
-
-from src.crud.user import user_crud
 
 router = APIRouter()
 
