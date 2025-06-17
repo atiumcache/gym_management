@@ -41,7 +41,7 @@ def test_create_user(test_db: Session):
     assert created_user.email == "newuser@example.com"
     assert created_user.first_name == "John"
     assert created_user.last_name == "Doe"
-    assert created_user.phone.replace("-", "") == "tel:+12345678901"
+    assert created_user.phone == "12345678901"
     assert created_user.created_at is not None
     assert created_user.updated_at is not None
 
@@ -71,7 +71,7 @@ def test_get_user_by_email(test_db: Session):
     assert result.email == "test@example.com"
     assert result.first_name == "Test"
     assert result.last_name == "User"
-    assert result.phone.replace("-", "") == "tel:+12345678901"
+    assert result.phone == "12345678901"
     assert result.created_at is not None
     assert result.updated_at is not None
 

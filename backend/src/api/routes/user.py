@@ -1,5 +1,6 @@
 from typing import List, Optional
 
+from src.api.dependencies import get_current_active_user, get_current_user
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
@@ -10,6 +11,30 @@ from src.models.user import User
 from src.schemas.user import UserCreate, UserResponse, UserUpdate
 
 router = APIRouter()
+
+
+@router.get(
+    "/me",
+    status_code=status.HTTP_200_OK,
+    response_model=UserResponse,
+    summary="Retrieve the current user",
+    response_description="The current user",
+)
+def get_current_user_info(
+    current_user: User = Depends(get_current_active_user), db: Session = Depends(get_db)
+) -> UserResponse:
+    """Get Current user's information.
+
+    This endpoint requires authentication.
+
+    Args:
+        current_user: The current user. Defaults to Depends(get_current_active_user).
+        db: The db session. Defaults to Depends(get_db).
+
+    Returns:
+        The currently logged-in user based on their JWT token.
+    """
+    return current_user
 
 
 @router.post(

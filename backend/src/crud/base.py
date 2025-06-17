@@ -2,6 +2,7 @@ from typing import List, Optional, Type, TypeVar
 
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+from src.core.security import pwd_context
 
 ORMModel = TypeVar("ORMModel")
 
@@ -36,6 +37,10 @@ class CRUDRepository:
             The newly created record.
         """
         obj_create_data = obj_create.model_dump(exclude_none=True, exclude_unset=True)
+        if "password" in obj_create_data.keys():
+            obj_create_data["hashed_password"] = pwd_context.hash(
+                obj_create_data.pop("password")
+            )
         db_obj = self._model(**obj_create_data)
         db.add(db_obj)
         db.commit()

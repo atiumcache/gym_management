@@ -1,7 +1,6 @@
 from enum import Enum as PyEnum
 
-from sqlalchemy import (Column, DateTime, Enum, ForeignKey, Integer, String,
-                        func)
+from sqlalchemy import Column, DateTime, Enum, ForeignKey, Integer, String, func
 from sqlalchemy.orm import relationship
 
 from src.database import Base
@@ -12,7 +11,7 @@ class User(Base):
 
     id = Column(Integer, primary_key=True)
     email = Column(String, unique=True)
-    password = Column(String)
+    hashed_password = Column(String)
     first_name = Column(String)
     last_name = Column(String)
     phone = Column(String)

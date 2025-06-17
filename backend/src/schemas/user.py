@@ -2,15 +2,29 @@ import re
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, EmailStr, Field, field_validator
+from pydantic import BaseModel, EmailStr, Field, field_validator, field_serializer
 from pydantic_extra_types.phone_numbers import PhoneNumber
+from phonenumbers import parse, is_valid_number, NumberParseException
 
 
 class UserBase(BaseModel):
     email: EmailStr
     first_name: str = Field(..., min_length=1)
     last_name: str = Field(..., min_length=1)
-    phone: PhoneNumber
+    phone: str = Field(..., min_length=10, max_length=15)
+
+    @field_validator("phone")
+    @classmethod
+    def validate_phone_number(cls, v: str) -> str:
+        # TODO: Implement standardized validation from PhoneNumber library
+        # Remove all non-digit characters
+        digits = "".join(c for c in v if c.isdigit())
+
+        # Check if we have between 10-15 digits (standard phone number lengths with/without country code)
+        if len(digits) < 10 or len(digits) > 15:
+            raise ValueError("Phone number must be 10-15 digits")
+
+        return digits  # Return just the digits for consistent storage
 
 
 class UserCreate(UserBase):
@@ -55,7 +69,7 @@ class UserUpdate(UserBase):
     email: EmailStr  # Required
     first_name: str  # Required
     last_name: str  # Required
-    phone: PhoneNumber  # Required
+    phone: str = Field(..., min_length=10, max_length=15)
 
 
 class UserPasswordUpdate(UserBase):

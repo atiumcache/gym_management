@@ -4,7 +4,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 from src.config import settings
 
 engine = create_engine(
-    settings.database_url,
+    settings.DATABASE_URL,
     # pool_pre_ping=True,
     # pool_recyle=3600,
     echo=settings.debug,  # log queries in debug mode

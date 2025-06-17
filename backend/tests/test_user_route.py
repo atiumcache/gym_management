@@ -1,7 +1,7 @@
 import pytest
 from fastapi import Depends, status
 from fastapi.testclient import TestClient
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, sessionmaker
 
 from src.crud.user import user_crud
 from src.database import get_db
@@ -13,11 +13,9 @@ from src.schemas.user import UserCreate, UserResponse
 # Create a test client that overrides the database dependency
 @pytest.fixture
 def client(test_db):
+    """Test client that uses the test_db session."""
     def override_get_db():
-        try:
-            yield test_db
-        finally:
-            pass
+        yield test_db
 
     app.dependency_overrides[get_db] = override_get_db
     with TestClient(app) as test_client:
@@ -42,7 +40,7 @@ def test_create_user_success(client: TestClient, test_db: Session):
     assert created_user["email"] == user_data["email"]
     assert created_user["first_name"] == user_data["first_name"]
     assert created_user["last_name"] == user_data["last_name"]
-    assert created_user["phone"].replace("-", "") == "tel:" + user_data["phone"]
+    assert created_user["phone"].replace("-", "") == "14155552671"
     assert "password" not in created_user  # Password should not be returned
 
     # Verify user exists in database
