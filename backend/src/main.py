@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.api.routes.user import router as user_router
+from src.api.routes.users import router as users_router
 
 app = FastAPI(
     title="GymDash", description="API for managing a gym database.", version="0.0.1"
@@ -17,7 +18,8 @@ app.add_middleware(
 )
 
 # Include routers with API prefix
-app.include_router(user_router, prefix="/api/v1/user", tags=["users"])
+app.include_router(user_router, prefix="/api/v1/user", tags=["user"])
+app.include_router(users_router, prefix="/api/v1/users", tags=["users"])
 
 
 @app.get("/health")

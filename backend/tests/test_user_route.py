@@ -114,7 +114,7 @@ def test_create_user_invalid_data(client: TestClient, test_db: Session):
 
 def test_fetch_all_users_empty(client: TestClient, test_db: Session):
     """Test fetching all users when no users exist."""
-    response = client.get("/api/v1/user/all")
+    response = client.get("/api/v1/users/all")
     assert response.status_code == 200
     assert response.json() == []
 
@@ -144,7 +144,7 @@ def test_fetch_all_users_with_data(client: TestClient, test_db: Session):
         test_db.commit()
 
         # Make request
-        response = client.get("/api/v1/user/all")
+        response = client.get("/api/v1/users/all")
         assert response.status_code == 200
 
         # Verify response
@@ -158,4 +158,29 @@ def test_fetch_all_users_with_data(client: TestClient, test_db: Session):
             user_crud.delete(test_db, db_user1)
         if "db_user2" in locals():
             user_crud.delete(test_db, db_user2)
+        test_db.commit()
+
+
+def test_user_update(client: TestClient, test_db: Session):
+    """Test updating a user record."""
+    my_user = UserCreate(
+        email="user1@example.com",
+        first_name="User",
+        last_name="One",
+        phone="+14234278012",
+        password="Apassword123@",
+    )
+
+    try:
+        db_user = user_crud.create(test_db, my_user)
+        test_db.commit()
+        print("PRINTING", db_user.id)
+        response = client.get(f"/api/v1/user/{db_user.id}")
+        assert response.status_code == 200
+        user = response.json()
+        assert user["first_name"] == "User"
+
+    finally:
+        if "db_user" in locals():
+            user_crud.delete(test_db, db_user)
         test_db.commit()
