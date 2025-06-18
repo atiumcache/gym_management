@@ -36,11 +36,3 @@ When you're done testing, you can stop and remove the test containers:
 ```bash
 docker-compose -f ../docker-compose.test.yml down -v
 ```
-
-## Development
-
-### Running Tests with Coverage
-
-```bash
-pytest --cov=src --cov-report=term-missing
-```
