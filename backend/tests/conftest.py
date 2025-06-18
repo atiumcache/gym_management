@@ -14,7 +14,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from src.config import settings
 from src.database import Base
 from src.models.user import Role, User, UserRole
-from scripts.test_db import reset_test_db
+from src.models.activity import Activity, ActivityBooking
+
 
 # Test database configuration
 TEST_SQLALCHEMY_DATABASE_URL = "postgresql://test:test@localhost:5433/test"
@@ -48,7 +49,7 @@ def db_engine():
     engine = create_engine(
         TEST_SQLALCHEMY_DATABASE_URL,
         pool_pre_ping=True,
-        pool_recycle=3600,
+        poolclass=StaticPool,
     )
 
     # Wait for database to be ready
@@ -58,8 +59,25 @@ def db_engine():
     if not database_exists(engine.url):
         create_database(engine.url)
 
+    # Drop all tables first to ensure clean state
+    Base.metadata.drop_all(bind=engine)
+
+    # Create public schema if it doesn't exist
+    from sqlalchemy.schema import CreateSchema, MetaData
+
+    with engine.connect() as conn:
+        if not conn.dialect.has_schema(conn, "public"):
+            conn.execute(CreateSchema("public"))
+        conn.commit()
+
     # Create all tables
     Base.metadata.create_all(bind=engine)
+
+    # Reflect the database to see what tables exist
+    meta = MetaData()
+    meta.reflect(bind=engine)
+    if not meta.tables:
+        print("WARNING: No tables found in database after creation!")
 
     yield engine
 
@@ -74,31 +92,25 @@ def test_db(db_engine):
     # Create a new connection and transaction
     connection = db_engine.connect()
     transaction = connection.begin()
-    
+
     # Create a session bound to our connection
     TestingSessionLocal = sessionmaker(
-        autocommit=False,
-        autoflush=False,
-        bind=connection
+        autocommit=False, autoflush=False, bind=connection
     )
     db = TestingSessionLocal()
-    
+
     # Initialize required roles
     try:
         # Clear all data first
         db.query(UserRole).delete()
         db.query(User).delete()
         db.query(Role).delete()
-        
+
         # Add required roles
-        roles = [
-            Role(name="client"),
-            Role(name="coach"),
-            Role(name="admin")
-        ]
+        roles = [Role(name="client"), Role(name="coach"), Role(name="admin")]
         db.add_all(roles)
         db.commit()
-        
+
         yield db
     except Exception:
         db.rollback()

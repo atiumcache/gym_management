@@ -6,10 +6,11 @@ from pydantic_extra_types.phone_numbers import PhoneNumber
 
 
 class ActivityBase(BaseModel):
+    name: str
+    description: str
     coach_id: int
     start_time: datetime
     end_time: datetime
-    duration_mins: int
     credits_required: int = 1
     max_capacity: int = 10
 
