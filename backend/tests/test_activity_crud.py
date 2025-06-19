@@ -119,4 +119,4 @@ def test_get_activities_by_coach(test_db: Session):
     activities = activity_crud.get_activities(db=test_db, coach_id=coach_ids[0])
     assert len(activities) == 1
     print(activities[0])
-    assert activities[0].coach_id == coach_ids[0]
+    assert activities[0]["coach_id"] == coach_ids[0]

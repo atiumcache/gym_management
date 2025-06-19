@@ -10,12 +10,15 @@ from sqlalchemy_utils import create_database, database_exists
 
 # Add the project root directory to Python path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from src.config import settings
-from src.database import Base
+from src.database import Base, get_db
 from src.models.user import Role, User, UserRole
 from src.models.activity import Activity, ActivityBooking
-
+from fastapi.testclient import TestClient
+from fastapi import Depends
+from src.main import app
 
 # Test database configuration
 TEST_SQLALCHEMY_DATABASE_URL = "postgresql://test:test@localhost:5433/test"
@@ -99,6 +102,11 @@ def test_db(db_engine):
     )
     db = TestingSessionLocal()
 
+    # Set the session for all factories
+    from tests.factories import set_sqlalchemy_session
+
+    set_sqlalchemy_session(db)
+
     # Initialize required roles
     try:
         # Clear all data first
@@ -120,3 +128,16 @@ def test_db(db_engine):
         db.close()
         transaction.rollback()
         connection.close()
+
+
+@pytest.fixture
+def client(test_db):
+    """Test client that uses the test_db session."""
+
+    def override_get_db():
+        yield test_db
+
+    app.dependency_overrides[get_db] = override_get_db
+    with TestClient(app) as test_client:
+        yield test_client
+    app.dependency_overrides.clear()

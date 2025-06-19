@@ -1,26 +1,11 @@
 import pytest
-from fastapi import Depends, status
+from fastapi import status
 from fastapi.testclient import TestClient
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import Session
 
 from src.crud.user import user_crud
-from src.database import get_db
-from src.main import app
 from src.models.user import Role, RoleName, User, UserRole
 from src.schemas.user import UserCreate, UserResponse
-
-
-# Create a test client that overrides the database dependency
-@pytest.fixture
-def client(test_db):
-    """Test client that uses the test_db session."""
-    def override_get_db():
-        yield test_db
-
-    app.dependency_overrides[get_db] = override_get_db
-    with TestClient(app) as test_client:
-        yield test_client
-    app.dependency_overrides.clear()
 
 
 def test_create_user_success(client: TestClient, test_db: Session):
