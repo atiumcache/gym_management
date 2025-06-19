@@ -59,11 +59,11 @@ class ActivityCRUDRepository(CRUDRepository):
         # Load related data
         query = query.options(
             joinedload(Activity.coach).load_only(
-                User.first_name, User.last_name, User.email, User.phone_number
+                User.first_name, User.last_name, User.email, User.phone
             ),
             joinedload(Activity.bookings)
             .joinedload(ActivityBooking.user)
-            .load_only(User.first_name, User.last_name, User.email, User.phone_number),
+            .load_only(User.first_name, User.last_name, User.email, User.phone),
         )
 
         # Execute query

@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Enum, ForeignKey, Text, Integer, DateTime
+from sqlalchemy.orm import relationship
 
 from src.models.user import User
 from enum import Enum as PyEnum
@@ -13,12 +14,16 @@ class Activity(Base):
     name = Column(Text)
     description = Column(Text)
     coach_id = Column(Integer, ForeignKey("user.id"))
+    coach = relationship("User", back_populates="coached_activities")
     start_time = Column(DateTime)
     end_time = Column(DateTime)
     # required_credit_type_id = Column(Integer) # TODO: add foreign key
     credits_required = Column(Integer)
     max_capacity = Column(Integer)
     # recurring? TODO
+    bookings = relationship(
+        "ActivityBooking", back_populates="activity", cascade="all, delete-orphan"
+    )
 
 
 class BookingStatus(str, PyEnum):
@@ -33,5 +38,7 @@ class ActivityBooking(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey("user.id"))
     activity_id = Column(Integer, ForeignKey("activity.id"))
+    activity = relationship("Activity", back_populates="bookings")
+    user = relationship("User", back_populates="activity_bookings")
     credits_used = Column(Integer)
     booking_status = Column(Enum(BookingStatus, name="activity_booking_status"))

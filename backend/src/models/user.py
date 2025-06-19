@@ -9,7 +9,7 @@ from src.database import Base
 class User(Base):
     __tablename__ = "user"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     email = Column(String, unique=True)
     hashed_password = Column(String)
     first_name = Column(String)
@@ -19,6 +19,8 @@ class User(Base):
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
 
     roles = relationship("Role", secondary="user_role", back_populates="users")
+    coached_activities = relationship("Activity", back_populates="coach")
+    activity_bookings = relationship("ActivityBooking", back_populates="user")
 
 
 class RoleName(str, PyEnum):
