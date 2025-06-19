@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from src.crud.user import user_crud
 from src.models.user import Role, RoleName, User, UserRole
 from src.schemas.user import UserCreate, UserResponse
+from tests.factories import UserFactory, RoleFactory
 
 
 def test_create_user_success(client: TestClient, test_db: Session):
@@ -167,3 +168,18 @@ def test_user_update(client: TestClient, test_db: Session):
         if "db_user" in locals():
             user_crud.delete(test_db, db_user)
         test_db.commit()
+
+
+def test_get_coaches(client: TestClient, test_db: Session):
+    some_clients = [UserFactory(roles=[RoleFactory(name="client")]) for _ in range(15)]
+    test_db.commit()
+    num_coaches = 4
+    some_coaches = [
+        UserFactory(roles=[RoleFactory(name="coach")]) for _ in range(num_coaches)
+    ]
+    test_db.commit()
+
+    response = client.get("/api/v1/user/coaches/")
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data) == num_coaches

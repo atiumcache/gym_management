@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Sequence
 
 from src.api.dependencies import get_current_active_user, get_current_user
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -7,8 +7,8 @@ from sqlalchemy.orm import Session
 
 from src.crud.user import UserCRUDRepository, user_crud
 from src.database import get_db
-from src.models.user import User
-from src.schemas.user import UserCreate, UserResponse, UserUpdate
+from src.models.user import User, RoleName
+from src.schemas.user import UserCreate, UserResponse, UserUpdate, UserBase
 
 router = APIRouter()
 
@@ -118,3 +118,27 @@ def update_user(
 
     updated_user = user_crud.update(db=db, db_obj=db_user, obj_update=user_update)
     return updated_user
+
+
+@router.get(
+    "/coaches/",
+    response_model=List[UserResponse],
+    status_code=status.HTTP_200_OK,
+    summary="Get all coaches",
+    response_description="List of all coaches",
+)
+def get_all_coaches(
+    db: Session = Depends(get_db),
+    # current_user: User = Depends(get_current_active_user),
+) -> Sequence[UserResponse]:
+    """Get all users with coach role.
+
+    Args:
+        db: The database session. Defaults to Depends(get_db).
+        current_user: The current authenticated user. Defaults to Depends(get_current_active_user).
+
+    Returns:
+        List of UserResponse objects representing all coaches.
+    """
+    coaches = user_crud.get_users_by_role(db, RoleName.COACH)
+    return coaches

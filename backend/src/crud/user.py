@@ -153,6 +153,24 @@ class UserCRUDRepository(CRUDRepository):
         except Exception:
             db.rollback()
             return False
+            
+    def get_users_by_role(self, db: Session, role_name: str) -> List[User]:
+        """Get all users with a specific role.
+        
+        Args:
+            db: The database session
+            role_name: Name of the role to filter users by
+            
+        Returns:
+            List of User objects with the specified role
+        """
+        return (
+            db.query(User)
+            .join(UserRole, User.id == UserRole.user_id)
+            .join(Role, UserRole.role_id == Role.id)
+            .filter(Role.name == role_name)
+            .all()
+        )
 
 
 user_crud = UserCRUDRepository(User)
