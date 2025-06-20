@@ -1,9 +1,9 @@
-import { CreateActivityForm } from '@/components/create-activity-form';
+import { CreateActivityForm } from '@/components/CreateActivityForm';
 
 export function CreateActivity() {
   return (
     <>
-      <div>Testing</div>
+      <h2>Create a new class</h2>
       <CreateActivityForm />
     </>
   );

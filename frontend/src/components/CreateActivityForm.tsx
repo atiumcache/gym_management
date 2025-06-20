@@ -24,13 +24,12 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { DatePicker } from '@/components/date-picker';
+import { DatePicker } from '@/components/DatePicker';
 import type { User } from '@/types/api';
 import { API_BASE_URL, API_ENDPOINTS } from '@/config';
 
@@ -44,6 +43,8 @@ const formSchema = z.object({
   credits_required: z.number(),
   max_capacity: z.number(),
 });
+
+// TODO: Make sure this formSchema aligns with backend schema
 
 export function CreateActivityForm() {
   // 1. Define your form.
@@ -264,6 +265,7 @@ export function CreateActivityForm() {
             </FormItem>
           )}
         />
+
         <Button type="submit">Create Class</Button>
       </form>
     </Form>

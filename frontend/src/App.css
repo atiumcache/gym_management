@@ -26,11 +26,11 @@
   * {
     @apply border-border outline-ring/50;
   }
-  
+
   body {
     @apply bg-background text-foreground;
   }
-  
+
   /* Ensure form elements use the correct font */
   input,
   button,
@@ -45,19 +45,19 @@
   .card {
     @apply p-8 bg-card text-card-foreground rounded-lg border shadow-sm;
   }
-  
+
   .logo {
     @apply h-24 p-6 will-change-transform transition-transform duration-300;
-    
+
     &:hover {
       filter: drop-shadow(0 0 2em #646cffaa);
     }
-    
+
     &.react:hover {
       filter: drop-shadow(0 0 2em #61dafbaa);
     }
   }
-  
+
   .read-the-docs {
     @apply text-muted-foreground;
   }
