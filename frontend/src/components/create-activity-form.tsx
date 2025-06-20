@@ -30,6 +30,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { DatePicker } from '@/components/date-picker';
 import type { User } from '@/types/api';
 import { API_BASE_URL, API_ENDPOINTS } from '@/config';
 
@@ -37,8 +38,9 @@ const formSchema = z.object({
   name: z.string().min(1).max(50),
   description: z.string(),
   coach_id: z.number(),
+  datetime: z.date(),
   start_time: z.string(),
-  end_time: z.string(),
+  duration: z.string(),
   credits_required: z.number(),
   max_capacity: z.number(),
 });
@@ -184,7 +186,85 @@ export function CreateActivityForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+
+        <FormField
+          control={form.control}
+          name="datetime"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Start Date/Time</FormLabel>
+              <FormControl>
+                <DatePicker
+                  value={field.value}
+                  onChange={(date) => {
+                    field.onChange(date);
+                  }}
+                  label="Date"
+                  className="flex gap-8"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="duration"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Duration (minutes)</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  min="1"
+                  {...field}
+                  onChange={(e) => field.onChange(parseInt(e.target.value))}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="credits_required"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Credits required</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  min="1"
+                  {...field}
+                  onChange={(e) => field.onChange(parseInt(e.target.value))}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="max_capacity"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Max attendees</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  min="1"
+                  {...field}
+                  onChange={(e) => field.onChange(parseInt(e.target.value))}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Create Class</Button>
       </form>
     </Form>
   );
