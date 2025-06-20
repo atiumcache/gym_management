@@ -6,4 +6,5 @@ export const API_ENDPOINTS = {
   USER: '/api/v1/user/',
   ACTIVITY: '/api/v1/activity/',
   COACH: '/api/v1/user/coaches/',
+  GET_ACTIVITIES: '/api/v1/activity/',
 };

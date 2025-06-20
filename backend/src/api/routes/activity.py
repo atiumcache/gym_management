@@ -19,6 +19,22 @@ router = APIRouter()
 # TODO: Implement "current_user" auth
 
 
+@router.get(
+    "/",
+    response_model=List[ActivityResponse],
+    status_code=status.HTTP_200_OK,
+    summary="Get all activities",
+)
+async def get_all_activities(db: Session = Depends(get_db)):
+    try:
+        activities = activity_crud.get_activities(db=db)
+        return activities
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Error retrieving activities: {str(e)}"
+        )
+
+
 @router.get("/filtered")
 async def get_activities(
     db: Session = Depends(get_db),

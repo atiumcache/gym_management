@@ -1,4 +1,12 @@
-import { Calendar, Home, Inbox, Search, Settings } from 'lucide-react';
+import {
+  Calendar,
+  CalendarPlus,
+  GanttChartSquare,
+  Home,
+  Inbox,
+  Search,
+  Settings,
+} from 'lucide-react';
 
 import {
   Sidebar,
@@ -22,7 +30,12 @@ const items = [
   {
     title: 'Create Activity',
     path: '/dashboard/create-activity',
-    icon: Inbox,
+    icon: CalendarPlus,
+  },
+  {
+    title: 'Activities',
+    path: '/dashboard/activities',
+    icon: GanttChartSquare,
   },
   {
     title: 'Calendar',

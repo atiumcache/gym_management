@@ -6,6 +6,7 @@ from sqlalchemy.sql.expression import and_, or_
 
 from src.crud.base import CRUDRepository
 from src.models.activity import Activity, ActivityBooking
+from src.schemas.activity import ActivityResponse
 from src.models.user import User
 
 
@@ -17,11 +18,10 @@ class ActivityCRUDRepository(CRUDRepository):
         self,
         db: Session,
         coach_id: Optional[int] = None,
-        start_date: Optional[date] = None,
-        end_date: Optional[date] = None,
+        start_date: Optional[datetime] = None,
         min_available_spots: Optional[int] = None,
         include_past: bool = False,
-    ) -> List[Dict[str, Any]]:
+    ) -> List[ActivityResponse]:
         """
         Retrieve activities with optional filtering.
 
@@ -29,7 +29,6 @@ class ActivityCRUDRepository(CRUDRepository):
             db: Database session
             coach_id: Filter by coach ID
             start_date: Filter activities after this date
-            end_date: Filter activities before this date
             min_available_spots: Filter activities with at least this many spots available
             include_past: Whether to include past activities (default: False)
 
@@ -46,11 +45,6 @@ class ActivityCRUDRepository(CRUDRepository):
         if start_date:
             query = query.filter(
                 Activity.start_time >= datetime.combine(start_date, datetime.min.time())
-            )
-
-        if end_date:
-            query = query.filter(
-                Activity.start_time <= datetime.combine(end_date, datetime.max.time())
             )
 
         if not include_past:
@@ -93,8 +87,6 @@ class ActivityCRUDRepository(CRUDRepository):
                     "last_name": booking.user.last_name,
                     "email": booking.user.email,
                     "phone": booking.user.phone_number,
-                    "booking_status": booking.booking_status,
-                    "credits_used": booking.credits_used,
                 }
                 for booking in activity.bookings
             ]
@@ -102,14 +94,16 @@ class ActivityCRUDRepository(CRUDRepository):
             result.append(
                 {
                     "id": activity.id,
+                    "name": activity.name,
+                    "description": activity.description,
+                    "duration": activity.duration,
                     "coach_id": activity.coach_id,
                     "coach_first_name": activity.coach.first_name,
                     "coach_last_name": activity.coach.last_name,
                     "start_time": activity.start_time,
-                    "end_time": activity.end_time,
                     "credits_required": activity.credits_required,
                     "max_capacity": activity.max_capacity,
-                    "available_spots": available_spots,
+                    "spots_left": available_spots,
                     "attendees": attendees,
                     "attendee_count": booked_count,
                 }

@@ -2,6 +2,7 @@ import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router';
 import { Home } from './pages/Home';
 import { Dashboard, CreateActivity, DashboardHome } from './pages/dashboard/';
+import { Activities } from './pages/dashboard/Activities';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />}>
           <Route index element={<DashboardHome />} />
           <Route path="create-activity" element={<CreateActivity />} />
+          <Route path="activities" element={<Activities />} />
         </Route>
       </Routes>
     </BrowserRouter>
