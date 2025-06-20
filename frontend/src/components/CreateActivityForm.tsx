@@ -32,6 +32,7 @@ import {
 import { DatePicker } from '@/components/DatePicker';
 import type { User } from '@/types/api';
 import { API_BASE_URL, API_ENDPOINTS } from '@/config';
+import { toast } from 'sonner';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name is required').max(50),
@@ -94,8 +95,9 @@ export function CreateActivityForm() {
       }
 
       console.log('Success:', data);
-      alert('Activity created successfully!');
-      form.reset();
+      toast('Activity created successfully!');
+      form.reset(); // Reload the page to reset the form and prevent duplicate submissions
+      // TODO: Reset the form fields to defaults/empty
     } catch (error) {
       console.error('Error:', error);
       setError(error instanceof Error ? error.message : 'Something went wrong');
