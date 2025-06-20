@@ -10,9 +10,9 @@ class ActivityBase(BaseModel):
     description: str
     coach_id: int
     start_time: datetime
-    end_time: datetime
-    credits_required: int = 1
-    max_capacity: int = 10
+    duration: int
+    credits_required: int
+    max_capacity: int
 
 
 class AttendeeInfo(BaseModel):

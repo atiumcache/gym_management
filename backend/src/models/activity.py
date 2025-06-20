@@ -16,7 +16,7 @@ class Activity(Base):
     coach_id = Column(Integer, ForeignKey("user.id"))
     coach = relationship("User", back_populates="coached_activities")
     start_time = Column(DateTime)
-    end_time = Column(DateTime)
+    duration = Column(Integer)
     # required_credit_type_id = Column(Integer) # TODO: add foreign key
     credits_required = Column(Integer)
     max_capacity = Column(Integer)
