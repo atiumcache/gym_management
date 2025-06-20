@@ -1,6 +1,7 @@
 import {
   ActivityCard,
   type ActivityCardProps,
+  SkeletonActivityCard,
 } from '@/components/ActivityCard';
 import { useEffect, useState } from 'react';
 import { API_BASE_URL, API_ENDPOINTS } from '@/config';
@@ -16,6 +17,8 @@ export function Activities() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchActivities = async () => {
+    // TODO: Remove this delay in production
+    await new Promise((r) => setTimeout(r, 2000));
     setIsLoading(true);
     try {
       const response = await fetch(
@@ -50,6 +53,29 @@ export function Activities() {
         </Button>
       </div>
 
+      {error && (
+        <div className="text-red-500 mb-4">
+          Error: {error}.{' '}
+          <button onClick={fetchActivities} className="underline">
+            Try again
+          </button>
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {isLoading
+          ? // Show 6 skeleton cards while loading
+            Array(6)
+              .fill(0)
+              .map((_, index) => (
+                <SkeletonActivityCard key={`skeleton-${index}`} />
+              ))
+          : // Show actual activity cards when loaded
+            activities.map((activity) => (
+              <ActivityCard key={activity.id} {...activity} />
+            ))}
+      </div>
+
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-background rounded-lg w-full max-w-4xl h-[90vh] overflow-auto p-6">
@@ -72,12 +98,6 @@ export function Activities() {
           </div>
         </div>
       )}
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {activities.map((activity) => (
-          <ActivityCard key={activity.name} {...activity} />
-        ))}
-      </div>
     </>
   );
 }

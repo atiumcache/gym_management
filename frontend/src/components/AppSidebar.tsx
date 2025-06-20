@@ -43,8 +43,8 @@ const items = [
     icon: GanttChartSquare,
   },
   {
-    title: 'Members',
-    path: '/dashboard/members',
+    title: 'Clients',
+    path: '/dashboard/clients',
     icon: Users,
   },
   {

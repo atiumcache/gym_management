@@ -22,4 +22,8 @@ def fetch_all_users(db: Session = Depends(get_db)) -> List[Optional[UserResponse
     Returns:
         List of UserResponse models.
     """
-    return user_crud.get_many(db)
+    users = user_crud.get_many(db)
+    result = []
+    for user in users:
+        result.append(UserResponse.from_orm(user))
+    return result

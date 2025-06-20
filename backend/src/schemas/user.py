@@ -63,6 +63,9 @@ class UserResponse(UserBase):
     created_at: datetime
     updated_at: datetime
 
+    class Config:
+        from_attributes = True  # Enables ORM mode (formerly orm_mode = True)
+
 
 class UserUpdate(UserBase):
     id: int

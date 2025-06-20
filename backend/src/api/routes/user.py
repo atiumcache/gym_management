@@ -14,6 +14,21 @@ router = APIRouter()
 
 
 @router.get(
+    "/all",
+    status_code=status.HTTP_200_OK,
+    response_model=List[UserResponse],
+    summary="Get all users",
+    response_description="List of all users",
+)
+def get_all_users(db: Session = Depends(get_db)) -> List[UserResponse]:
+    try:
+        users = user_crud.get_many(db=db)
+        return [UserResponse.from_orm(user) for user in users]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error retrieving users: {str(e)}")
+
+
+@router.get(
     "/me",
     status_code=status.HTTP_200_OK,
     response_model=UserResponse,
