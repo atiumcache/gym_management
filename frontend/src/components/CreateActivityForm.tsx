@@ -48,7 +48,11 @@ const formSchema = z.object({
 
 // TODO: Make sure this formSchema aligns with backend schema
 
-export function CreateActivityForm() {
+interface CreateActivityFormProps {
+  onSuccess?: () => void;
+}
+
+export function CreateActivityForm({ onSuccess }: CreateActivityFormProps) {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -96,8 +100,10 @@ export function CreateActivityForm() {
 
       console.log('Success:', data);
       toast('Activity created successfully!');
-      form.reset(); // Reload the page to reset the form and prevent duplicate submissions
-      // TODO: Reset the form fields to defaults/empty
+      form.reset();
+      if (onSuccess) {
+        onSuccess();
+      }
     } catch (error) {
       console.error('Error:', error);
       setError(error instanceof Error ? error.message : 'Something went wrong');

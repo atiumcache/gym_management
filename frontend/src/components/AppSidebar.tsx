@@ -1,16 +1,20 @@
 import {
   Calendar,
   CalendarPlus,
+  ChevronUp,
   GanttChartSquare,
   Home,
   Inbox,
   Search,
   Settings,
+  User2,
+  Users,
 } from 'lucide-react';
 
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -19,6 +23,12 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { useLocation } from 'react-router';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu';
 
 // Menu items.
 const items = [
@@ -28,19 +38,14 @@ const items = [
     icon: Home,
   },
   {
-    title: 'Create Activity',
-    path: '/dashboard/create-activity',
-    icon: CalendarPlus,
-  },
-  {
     title: 'Activities',
     path: '/dashboard/activities',
     icon: GanttChartSquare,
   },
   {
-    title: 'Calendar',
-    path: '#',
-    icon: Calendar,
+    title: 'Members',
+    path: '/dashboard/members',
+    icon: Users,
   },
   {
     title: 'Search',
@@ -62,7 +67,7 @@ export function AppSidebar() {
     <Sidebar side="left" variant="floating" collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel>EP Fitness</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => {
@@ -84,6 +89,36 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      {/* Footer */}
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton>
+                  <User2 /> Sample User
+                  <ChevronUp className="ml-auto" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                side="top"
+                className="w-[--radix-popper-anchor-width]"
+              >
+                <DropdownMenuItem>
+                  <span>Account</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <span>Billing</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <span>Sign out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }
