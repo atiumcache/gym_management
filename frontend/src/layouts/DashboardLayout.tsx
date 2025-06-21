@@ -10,9 +10,9 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       <SidebarProvider>
         <AppSidebar />
 
-        <main className="flex-1">
+        <main className="flex flex-col flex-1 py-4.5 px-1 items-center">
           <Header />
-          {children}
+          <div className="px-8 max-w-[1280px] w-full">{children}</div>
         </main>
       </SidebarProvider>
       <Toaster />

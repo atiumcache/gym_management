@@ -7,8 +7,8 @@ import { useEffect, useState } from 'react';
 import { API_BASE_URL, API_ENDPOINTS } from '@/config';
 import { CalendarPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { CreateActivityForm } from '@/components/CreateActivityForm';
 import { toast } from 'sonner';
+import { AddClientForm } from '@/components/AddClientForm';
 
 export function Clients() {
   const [clients, setClients] = useState<ClientCardProps[]>([]);
@@ -62,7 +62,7 @@ export function Clients() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols2 lg:grid-cols-3 gap-4">
         {isLoading
           ? // Show 6 skeleton cards while loading
             Array(6)
@@ -86,7 +86,7 @@ export function Clients() {
                 Close
               </Button>
             </div>
-            <CreateActivityForm
+            <AddClientForm
               onSuccess={() => {
                 fetchClients();
                 setIsModalOpen(false);

@@ -2,6 +2,7 @@ import {
   Calendar,
   CalendarPlus,
   ChevronUp,
+  DollarSign,
   GanttChartSquare,
   Home,
   Inbox,
@@ -48,9 +49,9 @@ const items = [
     icon: Users,
   },
   {
-    title: 'Search',
+    title: 'Payments',
     path: '#',
-    icon: Search,
+    icon: DollarSign,
   },
   {
     title: 'Settings',
