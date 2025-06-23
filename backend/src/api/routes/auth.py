@@ -44,7 +44,7 @@ async def login(
     """Alternative login endpoint that accepts JSON."""
     user = user_crud.get_user_by_email(db, email=user_login.email)
 
-    if not user or not verify_password(user_login.password, user.password):
+    if not user or not verify_password(user_login.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect email or password",

@@ -5,6 +5,7 @@ import { Dashboard, CreateActivity, DashboardHome } from './pages/dashboard/';
 import { Activities } from './pages/dashboard/Activities';
 import { Clients } from './pages/dashboard/Clients';
 import { ClientDetail } from './pages/dashboard/ClientDetail';
+import Login from './pages/dashboard/Login';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path=":id" element={<ClientDetail />} />
           </Route>
         </Route>
+        <Route path="login" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );
