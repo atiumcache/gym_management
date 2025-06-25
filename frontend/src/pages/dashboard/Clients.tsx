@@ -21,11 +21,29 @@ export function Clients() {
     setIsLoading(true);
     await new Promise((r) => setTimeout(r, 2000));
     try {
+      const token = localStorage.getItem('auth_token');
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
       const response = await fetch(
-        `${API_BASE_URL}${API_ENDPOINTS.GET_ALL_USERS}`
+        `${API_BASE_URL}${API_ENDPOINTS.GET_ALL_USERS}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
       );
+
       if (!response.ok) {
-        throw new Error('Failed to fetch activities');
+        if (response.status === 401) {
+          // Handle unauthorized (token expired or invalid)
+          localStorage.removeItem('auth_token');
+          window.location.href = '/login';
+          return;
+        }
+        throw new Error('Failed to fetch clients');
       }
       const data = await response.json();
       setClients(data as ClientCardProps[]);
